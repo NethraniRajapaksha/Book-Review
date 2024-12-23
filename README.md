@@ -1,6 +1,7 @@
 # BookMark Web Application (MERN)
 
-##SetUp Instructions
+SetUp Instructions
+
 ```bash
 cd BACKEND
 ```
@@ -12,7 +13,7 @@ npm start
 ```
 
 ```bash
-cd backend
+cd frontend
 ```
 ```bash
 npm install
@@ -20,3 +21,5 @@ npm install
 ```bash
 npm start
 ```
+
+
