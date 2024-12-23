@@ -2,12 +2,13 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #333;
+    background-color: rgb(9, 3, 43);
+
     padding: 10px 20px;
   }
   
   .navbar-logo h2 {
-    color: #fff;
+    color: #ffffff;
     margin: 0;
   }
   
@@ -25,9 +26,10 @@
   
   .navbar-links a {
     text-decoration: none;
-    color: #fff;
-    font-size: 16px;
+    color: #ffffff;
+    font-size: 20px;
     transition: color 0.3s ease;
+    font-weight: bold;
   }
   
   .navbar-links a:hover {

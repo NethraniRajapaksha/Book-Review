@@ -11,17 +11,13 @@ function AddReview() {
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  const handleStarClick = (starValue) => {
-    setRating(starValue);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const newReview = {
         BookTitle: bookTitle,
         Author: author,
-        Rating: rating,
+        Rating: parseInt(rating),
         ReviewText: reviewText,
         Date: new Date().toISOString(),
       };
@@ -38,6 +34,26 @@ function AddReview() {
       setErrorMessage('Failed to add review. Please try again.');
       setSuccessMessage('');
     }
+  };
+
+  const handleStarClick = (index) => {
+    setRating(index + 1); // Set rating to the clicked star index + 1
+  };
+
+  const renderStars = () => {
+    const stars = [];
+    for (let i = 0; i < 5; i++) {
+      stars.push(
+        <span
+          key={i}
+          className={`star ${i < rating ? 'filled' : ''}`}
+          onClick={() => handleStarClick(i)}
+        >
+          ★
+        </span>
+      );
+    }
+    return stars;
   };
 
   return (
@@ -69,15 +85,7 @@ function AddReview() {
           <label>
             Rating:
             <div className="star-rating">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <span
-                  key={star}
-                  className={`star ${star <= rating ? 'filled' : ''}`}
-                  onClick={() => handleStarClick(star)}
-                >
-                  ★
-                </span>
-              ))}
+              {renderStars()}
             </div>
           </label>
           <label>

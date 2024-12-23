@@ -19,9 +19,9 @@ function Review() {
       try {
         const response = await axios.get('http://localhost:5000/reviews');
         setReviews(response.data.reviews);
-        setFilteredReviews(response.data.reviews); // Initially show all reviews
+        setFilteredReviews(response.data.reviews); //showing all reviews
       } catch (err) {
-        setError('Failed to fetch reviews. Please try again later.');
+        setError('Failed to fetch reviews. Please try again later.'); //db connection faill
         console.error('Error fetching reviews:', err);
       }
     };
@@ -29,20 +29,25 @@ function Review() {
     fetchReviews();
   }, []);
 
+  // hook fo filter reviews
   useEffect(() => {
     filterReviews();
   }, [searchQuery, filterRating, sortOrder, reviews]);
+
+  // set the updating data to the relevent id
 
   const openModal = (review) => {
     setEditingReview(review._id);
     setModalData({ ...review });
   };
 
+  // close the model and  reset state
   const closeModal = () => {
     setEditingReview(null);
     setModalData(null);
   };
 
+  // handle the input values with updated data
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setModalData((prev) => ({ ...prev, [name]: value }));
@@ -63,6 +68,7 @@ function Review() {
     }
   };
 
+  //delete review
   const deleteReview = async (id) => {
     try {
       await axios.delete(`http://localhost:5000/reviews/${id}`);
@@ -73,12 +79,28 @@ function Review() {
     }
   };
 
+
+// star calculation
   const renderStars = (rating) => {
     const fullStars = '★'.repeat(rating);
     const emptyStars = '☆'.repeat(5 - rating);
-    return <span>{fullStars}{emptyStars}</span>;
+    return <span>{fullStars}{emptyStars}</span>; //combine full stars with empty stars
   };
 
+  const calculateAverageRating = (bookTitle) => {
+    // Filter reviews for the specific book
+    const bookReviews = reviews.filter((review) => review.BookTitle === bookTitle);
+  
+    // If no reviews found, return 0
+    if (bookReviews.length === 0) return 0;
+  
+    // Ensure Rating is treated as a number
+    const totalRating = bookReviews.reduce((acc, review) => acc + Number(review.Rating), 0);
+  
+    // Calculate and return the average rating
+    return totalRating / bookReviews.length;
+  };
+  
   const filterReviews = () => {
     let filtered = reviews;
   
@@ -89,7 +111,6 @@ function Review() {
       );
     }
   
-    // Convert filterRating to a number and compare with review.Rating
     if (filterRating > 0) {
       filtered = filtered.filter((review) => Number(review.Rating) === Number(filterRating));
     }
@@ -102,7 +123,7 @@ function Review() {
   
     setFilteredReviews(filtered);
   };
-  
+
   const renderDate = (date) => {
     const formattedDate = new Date(date).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -121,7 +142,7 @@ function Review() {
     <div>
       <Nav />
       <div className="review-container">
-        <h1>All Reviews</h1>
+        <h1>Review Collection</h1>
         {error && <p className="error-message">{error}</p>}
 
         <div className="review-filters">
@@ -167,6 +188,7 @@ function Review() {
                 <h3>{review.BookTitle}</h3>
                 <p><strong>Author:</strong> {review.Author}</p>
                 <p><strong>Rating:</strong> {renderStars(review.Rating)}</p>
+                <p><strong>Average Rating:</strong> {calculateAverageRating(review.BookTitle).toFixed(1)} Stars</p>
                 <p>{review.ReviewText}</p>
                 <p><strong>Reviewed on:</strong> {renderDate(review.Date)}</p>
                 <div className="review-actions">
