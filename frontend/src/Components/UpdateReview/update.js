@@ -1,8 +1,7 @@
-// UpdateReviewForm.js
 import React from 'react';
-import '../Review/review.css'
+import '../Review/review.css';
 
-function UpdateReviewForm({ modalData, handleInputChange, saveChanges, closeModal }) {
+function UpdateReviewForm({ modalData, handleInputChange, saveChanges, closeModal, handleStarClick }) {
   return (
     <div className="modal">
       <div className="modal-content">
@@ -27,14 +26,17 @@ function UpdateReviewForm({ modalData, handleInputChange, saveChanges, closeModa
         </label>
         <label>
           Rating:
-          <input
-            type="number"
-            name="Rating"
-            value={modalData.Rating}
-            onChange={handleInputChange}
-            min="1"
-            max="5"
-          />
+          <div className="star-rating">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <span
+                key={star}
+                className={`star ${star <= modalData.Rating ? 'filled' : ''}`}
+                onClick={() => handleStarClick(star)} // Handle star click to set rating
+              >
+                ★
+              </span>
+            ))}
+          </div>
         </label>
         <label>
           Review Text:
